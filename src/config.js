@@ -20,7 +20,7 @@ import hathorLib from '@hathor/wallet-lib';
  * . remove register/unregister token options;
  * . remove create new token option;
  */
-export const _IS_MULTI_TOKEN = true;
+export const _IS_MULTI_TOKEN = false;
 
 /**
  * Default token.
@@ -32,12 +32,16 @@ export const _IS_MULTI_TOKEN = true;
  *   uid: '000003a3b261e142d3dfd84970d3a50a93b5bc3a66a3b6ba973956148a3eb824'
  * }
  */
-export const _DEFAULT_TOKEN = hathorLib.constants.HATHOR_TOKEN_CONFIG;
+export const _DEFAULT_TOKEN = {
+    name: 'HathorBoletoCoin',
+    symbol: 'BOL',
+    uid: '00000000ca63b5048ca7603ed5fa607b0bda6f07c90de55e20e7f31856acd166'
+};
 
 /**
  * App's primary color (Hathor purple)
  */
-export const _PRIMARY_COLOR = '#8C46FF';
+export const _PRIMARY_COLOR = '#F0F8FF';
 
 /**
  * Sentry DSN to send errors

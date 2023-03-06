@@ -1,4 +1,4 @@
-package com.hathormobile;
+package com.hathorbolmobile;
 
 import com.facebook.react.ReactInstanceManager;
 

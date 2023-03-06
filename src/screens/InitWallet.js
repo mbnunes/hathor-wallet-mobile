@@ -53,14 +53,13 @@ class WelcomeScreen extends React.Component {
       <SafeAreaView style={{ flex: 1 }}>
         <HathorHeader withLogo />
         <View style={this.style.container}>
-          <Text style={this.style.title}>{t`Welcome to Hathor Wallet!`}</Text>
+          <Text style={this.style.title}>{t`Welcome to Hathor Bol Wallet!`}</Text>
           <View>
             <TextFmt style={this.style.text}>
-              {t`This wallet is connected to the **mainnet**.`}
+              {t`This wallet is official wallet to the **Hathor Bol**.`}
             </TextFmt>
             <Text style={this.style.text}>
-              {t`A mobile wallet is not the safest place to store your tokens.
-              So, we advise you to keep only a small amount of tokens here, such as pocket money.`}
+              {t`Use it to managed your BolCoins and enjoy life on this wonderful place!`}
             </Text>
             <Text style={this.style.text}>
               {str2jsx(

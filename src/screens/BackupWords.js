@@ -7,8 +7,11 @@
 
 import React from 'react';
 import { t } from 'ttag';
+import QRCode from 'react-native-qrcode-svg';
+import CopyClipboard from '../components/CopyClipboard';
 import _ from 'lodash';
 import {
+  Dimensions,
   Image,
   SafeAreaView,
   StyleSheet,
@@ -27,7 +30,10 @@ import { PRIMARY_COLOR } from '../constants';
 import { Strong } from '../utils';
 
 
+
+
 class BackupWords extends React.Component {
+  
   /**
    * step {number} Which validation step user is
    * indexes {Array} Array of indexes that will be used to execute the validation
@@ -40,6 +46,9 @@ class BackupWords extends React.Component {
     wordOptions: [],
     modal: null,
   };
+
+  
+
 
   style = Object.assign({}, baseStyle, StyleSheet.create({
     footerView: {
@@ -64,7 +73,46 @@ class BackupWords extends React.Component {
     button: {
       marginBottom: 16,
     },
+    wrapper: {
+      flex: 1,
+      alignItems: 'center',
+      marginHorizontal: 16,
+      marginTop: 32,
+      borderWidth: 1.5,
+      borderColor: '#e5e5ea',
+      borderRadius: 8,
+      marginBottom: 32,
+    },
+    qrcodeWrapper: {
+      padding: 24,
+      flex: 1,
+      marginTop: 32,
+    },
+    buttonContainer: {
+      flex: 1,
+      alignSelf: 'stretch',
+      alignItems: 'center',
+      paddingVertical: 16,
+    },
+    leftButtonBorder: {
+      borderRightWidth: 1.5,
+      borderColor: '#eee',
+    },
+    title: {
+      alignItems: 'center',
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginLeft: 24
+    },
+    text: {
+      fontSize: 16,
+      marginLeft: 24
+    }
   }));
+
+  
+
+
 
   // Array of words shown on the previous screen
   words = null;
@@ -121,120 +169,72 @@ class BackupWords extends React.Component {
     this.setState({ wordOptions: _.shuffle(options) });
   }
 
-  /**
-   * Method called after user selects a word
-   * If is the wrong word we show an error and go back to the words screen
-   * If is correct we move one step until the last one.
-   * In case of the last step we show success and redirect to the ChoosePin screen
-   *
-   * @param {String} word Word of the button clicked
-   */
-  wordSelected = (word) => {
-    const index = this.state.indexes[this.state.step];
-    if (this.words[index - 1].word === word) {
-      if (this.state.step < 4) {
-        // Correct word was chosen, move one step
-        this.setState((prevState) => ({ step: prevState.step + 1 }), () => {
-          this.updateWordsShownOnScreen();
-        });
-      } else {
-        // Success
-        this.setState({
-          modal:
-            // eslint-disable-next-line react/jsx-indent
-            <FeedbackModal
-              icon={<Image source={checkIcon} style={{ height: 105, width: 105 }} resizeMode='contain' />}
-              text={
-                <Text>{t`Words saved correctly`}</Text>
-              }
-              onDismiss={() => {
-                this.setState({ modal: null }, () => {
-                  this.props.navigation.navigate('ChoosePinScreen', { words: this.props.navigation.getParam('words') });
-                });
-              }}
-            />,
-        });
-      }
-    } else {
-      // Error, incorrect word was chosen
-      this.setState({
-        modal:
-          // eslint-disable-next-line react/jsx-indent
-          <FeedbackModal
-            icon={<Image source={errorIcon} style={{ height: 105, width: 105 }} resizeMode='contain' />}
-            text={(
-              <Text>
-                <Strong>Wrong word.</Strong>
-                Please double check the words you saved and start the process again.
-              </Text>
-)}
-            onDismiss={() => {
-              this.setState({ modal: null }, () => {
-                this.props.navigation.goBack();
-              });
-            }}
-          />,
-      });
-    }
-  }
-
   render() {
-    const renderOptions = () => this.state.wordOptions.map(({ id, word }) => (
-      <NewHathorButton
-        key={id}
-        style={this.style.button}
-        secondary
-        title={word}
-        onPress={() => this.wordSelected(word)}
-      />
-    ));
+    // This is used to set the width of the address wrapper view
+    // For some reason I was not being able to set as 100%, so I had to use this
+    const { height, width } = Dimensions.get('window');
 
-    const renderFooter = () => {
-      const viewArr = [];
-      for (let i = 0; i < this.state.indexes.length; i += 1) {
-        const styles = [this.style.footerView];
-        if (i === this.state.step) {
-          styles.push(this.style.current);
-        } else if (i < this.state.step) {
-          styles.push(this.style.past);
-        } else {
-          styles.push(this.style.future);
-        }
+    const addressWrapperStyle = StyleSheet.create({
+      style: {
+        padding: 16,
+        borderBottomWidth: 1.5,
+        borderTopWidth: 1.5,
+        borderColor: '#e5e5ea',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: width - 70,
+      },
+    });
 
-        if (i === this.state.indexes.length - 1) {
-          styles.push(this.style.lastView);
-        }
+    const renderQrCodeWords = () => {
 
-        viewArr.push(<View key={i} style={styles} />);
+
+      let myWords = "";
+
+      const getWords = Array.from(this.words.values());
+
+      for (let i=0; i<getWords.length; i++){
+        myWords = myWords + (getWords[i]["word"]) + " ";
       }
 
       return (
-        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center' }}>
-          {viewArr}
-        </View>
-      );
-    };
+      <View style={this.style.wrapper}>
+      <View style={this.style.qrcodeWrapper}>
+        <QRCode value={myWords} size={height < 650 ? 160 : 250} />
+      </View>
+      <View style={addressWrapperStyle.style}>
+        <CopyClipboard
+          text={myWords}
+          textStyle={{ fontSize: height < 650 ? 13 : 16 }}
+        />
+      </View>
+      </View>
+      );};
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <HathorHeader
           onBackPress={() => this.props.navigation.goBack()}
         />
-        {this.state.modal}
-        <View style={[this.style.container, { flexDirection: 'column', justifyContent: 'space-between' }]}>
-          <View>
-            <Text style={this.style.title}>{t`To make sure you saved,`}</Text>
+        <View style={[this.style.container, { flexDirection: 'column', justifyContent: 'center' }]}>
+          <View >
+            <Text style={this.style.title}>{t`Save your qrcode,`}</Text>
             <Text style={this.style.text}>
-              {t`Please select the word that corresponds to the number below:`}
-            </Text>
-            <Text style={[this.style.title, { textAlign: 'center', fontSize: 24 }]}>
-              {this.state.indexes[this.state.step]}
+              {t`it's on your word list:`}
             </Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }}>
-            {renderOptions()}
+            {renderQrCodeWords()}
           </View>
-          {renderFooter()}
+
+          <NewHathorButton
+              title={t`Next`}
+              // disabled={!this.state.address}
+              onPress={() => this.props.navigation.navigate('ChoosePinScreen', { words: this.props.navigation.getParam('words') })}
+          />
+
+          
         </View>
       </SafeAreaView>
     );

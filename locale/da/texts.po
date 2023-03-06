@@ -93,19 +93,19 @@ msgid ""
 "Privacy Policy|, or our website |link3:https://hathor.network/|."
 msgstr ""
 
-#. Success
-#. eslint-disable-next-line react/jsx-indent
 #: src/screens/BackupWords.js:148
+#.  Success
+#.  eslint-disable-next-line react/jsx-indent
 msgid "Words saved correctly"
-msgstr "Ord gemt korrekt"
+msgstr ""
 
 #: src/screens/BackupWords.js:226
 msgid "To make sure you saved,"
-msgstr "For at sikre dig, at du har gemt,"
+msgstr ""
 
 #: src/screens/BackupWords.js:228
 msgid "Please select the word that corresponds to the number below:"
-msgstr "Vælg det ord, der svarer til nummeret herunder:"
+msgstr ""
 
 #: src/screens/ChangePin.js:110
 msgid "Incorrect PIN code."
