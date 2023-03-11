@@ -68,7 +68,7 @@ import { WALLET_STATUS } from './sagas/wallet';
 
 const InitStack = createStackNavigator(
   {
-    WelcomeScreen,
+    //WelcomeScreen,
     InitialScreen,
     NewWordsScreen,
     LoadWordsScreen,
@@ -76,7 +76,7 @@ const InitStack = createStackNavigator(
     ChoosePinScreen,
   },
   {
-    initialRouteName: 'WelcomeScreen',
+    initialRouteName: 'InitialScreen',
     headerMode: 'none',
   }
 );

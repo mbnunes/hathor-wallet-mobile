@@ -132,11 +132,11 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "network.hathor.wallet"
+        applicationId "network.hathor.bolwallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 47
-        versionName "0.23.0"
+        versionCode 1
+        versionName "0.1.0"
         missingDimensionStrategy "react-native-camera", "general"
     }
     splits {
